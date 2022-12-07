@@ -8,9 +8,9 @@ def problem():
 
     with open(FILE_NAME, "r") as f:
 
-        stack = ["/"]
-        f.readline()
-
+        # create a pretend root
+        DISK = "C:"
+        stack = [DISK]
         directorySizes = Counter()
 
         while stack:
@@ -24,7 +24,7 @@ def problem():
                     print("ENTERING", currPath)
                     stack.append(currPath)
                 else:
-                    # we're leaving this folder maybe to return
+                    # we're leaving this folder, so add the information I've accumulated
                     leaving = stack.pop()
                     directorySizes[stack[-1]] += directorySizes[leaving]
                     print(
@@ -39,6 +39,7 @@ def problem():
                 # end of file remove "/"
                 leaving = stack.pop()
                 if stack:
+                    # update the parent node if it exists
                     directorySizes[stack[-1]] += directorySizes[leaving]
                     print(
                         f"LEAVING  {leaving} FOR {stack[-1]} AND ADDING {directorySizes[leaving]}"
@@ -48,16 +49,17 @@ def problem():
                 # we are ignoring 'dir *' and 'ls *' since they do not contribute to our flow
                 pass
 
+        ROOT = f"{DISK}//"
         print()
         # problem 1
-        print(f"CURR SIZE {directorySizes['/']}")
+        print(f"CURR SIZE {directorySizes[ROOT]}")
         print(
             f"SPACE OF DIRS <= 100000 = {sum([value for _, value in directorySizes.items() if value <= 100000])}"
         )
 
         # problem 2
         TOTAL = 70000000
-        spaceNeeded = 30000000 - (TOTAL - directorySizes["/"])
+        spaceNeeded = 30000000 - (TOTAL - directorySizes[ROOT])
         print(f"SPACE NEEDED {spaceNeeded}")
         minimumDirectory = float("inf")
         minDirectoryName = ""
