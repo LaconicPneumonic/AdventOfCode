@@ -1,6 +1,7 @@
 from typing import Tuple, List
 from enum import Enum
-FILE_NAME = './input.txt'
+
+FILE_NAME = "./input.txt"
 
 
 class State(Enum):
@@ -12,11 +13,13 @@ class State(Enum):
 def parseMove(line: str) -> Tuple[int, int, int]:
     splitTokens = line.split(" ")
 
-    return tuple([int(splitTokens[1]), int(splitTokens[3]) - 1, int(splitTokens[5]) - 1])
+    return tuple(
+        [int(splitTokens[1]), int(splitTokens[3]) - 1, int(splitTokens[5]) - 1]
+    )
 
 
 def problemTwo():
-    with open(FILE_NAME, 'r') as f:
+    with open(FILE_NAME, "r") as f:
 
         stack = []
         parsedStacks = [[]]
@@ -30,21 +33,21 @@ def problemTwo():
                     if line.find("1") == -1:
                         stack.append(line)
                     else:
-                        totalStacks = max([int(i)
-                                          for i in line.strip() if i != " "])
+                        totalStacks = max([int(i) for i in line.strip() if i != " "])
                         state = State.FLUSHING
 
                 case State.FLUSHING:
                     # line read at this point is empty
                     print(totalStacks)
 
-                    parsedStacks: List[List[str]] = [list()
-                                                     for _ in range(totalStacks)]
+                    parsedStacks: List[List[str]] = [list() for _ in range(totalStacks)]
                     while stack:
                         level = stack.pop()
                         # parse the charachters
                         stackValues = [
-                            level[4 * i + 1: 4 * (i + 1) - 2] for i in range(totalStacks)]
+                            level[4 * i + 1 : 4 * (i + 1) - 2]
+                            for i in range(totalStacks)
+                        ]
 
                         for i in range(totalStacks):
                             if stackValues[i].isalpha():
@@ -52,8 +55,7 @@ def problemTwo():
 
                     state = State.MOVING
                 case State.MOVING:
-                    amount, sourceStack, destinationStack = parseMove(
-                        line.strip())
+                    amount, sourceStack, destinationStack = parseMove(line.strip())
 
                     toBeAdded = []
                     for _ in range(amount):
@@ -65,7 +67,7 @@ def problemTwo():
 
 def problemOne():
 
-    with open(FILE_NAME, 'r') as f:
+    with open(FILE_NAME, "r") as f:
 
         stack = []
         parsedStacks = [[]]
@@ -79,21 +81,21 @@ def problemOne():
                     if line.find("1") == -1:
                         stack.append(line)
                     else:
-                        totalStacks = max([int(i)
-                                          for i in line.strip() if i != " "])
+                        totalStacks = max([int(i) for i in line.strip() if i != " "])
                         state = State.FLUSHING
 
                 case State.FLUSHING:
                     # line read at this point is empty
                     print(totalStacks)
 
-                    parsedStacks: List[List[str]] = [list()
-                                                     for _ in range(totalStacks)]
+                    parsedStacks: List[List[str]] = [list() for _ in range(totalStacks)]
                     while stack:
                         level = stack.pop()
                         # parse the charachters
                         stackValues = [
-                            level[4 * i + 1: 4 * (i + 1) - 2] for i in range(totalStacks)]
+                            level[4 * i + 1 : 4 * (i + 1) - 2]
+                            for i in range(totalStacks)
+                        ]
 
                         for i in range(totalStacks):
                             if stackValues[i].isalpha():
@@ -101,8 +103,7 @@ def problemOne():
 
                     state = State.MOVING
                 case State.MOVING:
-                    amount, sourceStack, destinationStack = parseMove(
-                        line.strip())
+                    amount, sourceStack, destinationStack = parseMove(line.strip())
 
                     for _ in range(amount):
 
