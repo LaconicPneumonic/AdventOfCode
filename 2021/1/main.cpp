@@ -2,80 +2,59 @@
 #include <fstream>
 #include <climits>
 #include <string>
-
-using namespace std;
+#include <queue>
 
 int main(int argc, char const *argv[])
 {
-    fstream inputFile;
-    inputFile.open("./input.txt", ios::in | ios::out);
+    std::fstream inputFile;
+    inputFile.open("./input.txt", std::ios::in);
 
-    int i = INT_MAX;
-
-    int ret = 0;
+    int retOne = 0;
     int retTwo = 0;
 
-    int a;
-    int b;
-    int c;
-    int prevSum = INT_MAX;
+    int i = INT_MAX;
+    std::queue<int> valQueue;
+    int prevSum = 0;
 
     if (inputFile.is_open())
     {
 
-        string line;
+        std::string line;
+        int lineValue = 0;
 
-        while (getline(inputFile, line))
+        while (std::getline(inputFile, line))
         {
 
-            if (i < stoi(line))
-            {
+            lineValue = std::stoi(line);
 
-                ret = ret + 1;
+            if (i < lineValue)
+            {
+                retOne++;
             }
 
-            if (!(a == 0 || b == 0 || c == 0))
+            if (valQueue.size() == 3)
             {
 
-                if (prevSum < (a + b + c))
+                if (prevSum < lineValue + prevSum - valQueue.front())
                 {
-
-                    retTwo = retTwo + 1;
+                    retTwo++;
                 }
 
-                prevSum = (a + b + c);
+                prevSum = prevSum - valQueue.front();
+                valQueue.pop();
             }
 
-            c = b;
-            b = a;
-            a = stoi(line);
+            prevSum = prevSum + lineValue;
+            valQueue.push(lineValue);
 
-            i = stoi(line);
-        }
-
-        if (i < stoi(line))
-        {
-
-            ret = ret + 1;
-        }
-
-        if (!(a == 0 || b == 0 || c == 0))
-        {
-
-            if (prevSum < (a + b + c))
-            {
-
-                retTwo = retTwo + 1;
-            }
-
-            prevSum = (a + b + c);
+            i = lineValue;
         }
 
         inputFile.close();
     }
 
-    cout << ret << endl;
-    cout << retTwo << endl;
+    std::cout << "P1: " << retOne << std::endl;
+    std::cout << "P2: " << retTwo << std::endl;
 
     return 0;
 }
