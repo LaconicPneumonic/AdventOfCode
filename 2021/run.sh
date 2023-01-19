@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # check if image exists
 # build image otherwise
 
@@ -28,7 +29,8 @@ docker start $CONTAINER_ID
 
 
 # execute the command!
-docker cp $1/* $CONTAINER_ID:/usr/src/aoc
-docker exec $CONTAINER_ID bash -c "g++ -o main main.cpp"
-docker exec $CONTAINER_ID bash -c "./main"
+docker cp $1/ $CONTAINER_ID:/usr/src/aoc
 
+echo "RUNNING"
+echo "-------"
+docker exec $CONTAINER_ID bash -c "cd $1; g++ -o main main.cpp; ./main"
