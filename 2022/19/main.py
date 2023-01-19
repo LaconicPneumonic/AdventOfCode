@@ -48,6 +48,8 @@ def maximize(
 
     CALLS += 1
 
+    print(robots, wallet, time)
+
     memoKey = getMemoKey(robots, wallet, time)
     if memoKey in memo:
 
@@ -69,18 +71,34 @@ def maximize(
 
     explored = None
 
-    for robot, cost in sorted(costs.items(), key=lambda p: p[0]):
+    for robot, cost in [
+        (i, costs[i])
+        for i in [
+            Material.ORE,
+            Material.CLAY,
+            Material.OBSIDIAN,
+            Material.GEODE,
+            Material.INVEST,
+        ]
+    ]:
 
         spent = dict(
             [(material, wallet[material] - amount) for material, amount in cost.items()]
         )
 
         # only invest if I haven't bought already
+
+        print(
+            wallet,
+            robots,
+            robot,
+            explored,
+            time,
+            spent,
+        )
         if all([postSpend >= 0 for _, postSpend in spent.items()]) and not (
             robot == Material.INVEST and explored != None
         ):
-
-            explored = robot
 
             robotOrder = [
                 Material.ORE,
@@ -125,6 +143,8 @@ def maximize(
                 memo,
             )
 
+            explored = robot
+
             if maxSoFar[1][Material.GEODE] < potWallet[Material.GEODE]:
 
                 maxSoFar = (potRobot, potWallet)
@@ -134,59 +154,12 @@ def maximize(
     return maxSoFar
 
 
-# with open(INPUT_FILE, "r") as f:
-
-#     bp = 1
-#     bpSum = 0
-
-#     for line in f:
-#         bots = re.split(r"[:\.]\s", line.strip())[1:]
-
-#         oreRobotCost = re.findall("\d+", bots[0])
-#         clayRobotCost = re.findall("\d+", bots[1])
-#         obsidianRobotCost = re.findall("\d+", bots[2])
-#         geodeRobotCost = re.findall("\d+", bots[3])
-
-#         costs = {
-#             Material.ORE: {Material.ORE: int(oreRobotCost[0])},
-#             Material.CLAY: {
-#                 Material.ORE: int(clayRobotCost[0]),
-#             },
-#             Material.OBSIDIAN: {
-#                 Material.ORE: int(obsidianRobotCost[0]),
-#                 Material.CLAY: int(obsidianRobotCost[1]),
-#             },
-#             Material.GEODE: {
-#                 Material.ORE: int(geodeRobotCost[0]),
-#                 Material.OBSIDIAN: int(geodeRobotCost[1]),
-#             },
-#         }
-
-#         tic = time.perf_counter()
-#         TIME = 24
-
-#         totalMemo = dict()
-#         robot, wallet = maximize(
-#             tuple([1, 0, 0, 0]), costs, tuple([0, 0, 0, 0]), TIME, totalMemo
-#         )
-
-#         toc = time.perf_counter()
-
-#         print(line.strip())
-#         print("TIME", toc - tic)
-#         print(robot, wallet)
-
-#         bpSum += bp * wallet[Material.GEODE]
-#         bp += 1
-#     print(bpSum)
-
-
 with open(INPUT_FILE, "r") as f:
 
     bpProduct = 1
     bpSum = 0
 
-    for i, line in enumerate(f.readlines()):
+    for i, line in enumerate(f.readlines()[:1]):
         bots = re.split(r"[:\.]\s", line.strip())[1:]
 
         oreRobotCost = re.findall("\d+", bots[0])
@@ -243,7 +216,7 @@ with open(INPUT_FILE, "r") as f:
 
         bpSum += (i + 1) * wallet[Material.GEODE]
 
-        if i < 3:
+        if i < -1:
             TIME = 32
             totalMemo = dict()
             CALLS = 0
