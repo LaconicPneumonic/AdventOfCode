@@ -1,5 +1,9 @@
 # Get the GCC preinstalled image from Docker Hub
-FROM gcc:12
+FROM alpine:3.14
+
+RUN apk add --no-cache bash
+RUN apk add --no-cache g++
+RUN apk add --no-cache valgrind
 
 # Specify the working directory
 WORKDIR /usr/src/aoc
