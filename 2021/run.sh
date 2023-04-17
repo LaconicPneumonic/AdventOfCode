@@ -35,7 +35,7 @@ echo "-------"
 
 if [[ $2 = "test" ]];
 then
-    docker exec $CONTAINER_ID bash -c "cd $1; g++ -o main main.cpp;  valgrind --leak-check=yes ./main"
+    docker exec $CONTAINER_ID bash -c "cd $1; g++ -o main main.cpp &&  valgrind --leak-check=yes ./main"
 else
-    docker exec $CONTAINER_ID bash -c "cd $1; g++ -o main main.cpp; ./main"
+    docker exec $CONTAINER_ID bash -c "cd $1; g++ -o main main.cpp && ./main"
 fi
