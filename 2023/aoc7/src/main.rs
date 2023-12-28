@@ -58,57 +58,6 @@ enum HandType {
     HighCard,
 }
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
-struct Hand([Card; 5]);
-
-impl Hand {
-    fn compare(left: Hand, right: Hand) -> Ordering {
-        let left_type = HandType::from_cards(left);
-        let right_type = HandType::from_cards(right);
-
-        if left_type != right_type {
-            return left_type.cmp(&right_type);
-        };
-
-        let first_none_equal = left.0.iter().zip(right.0.iter()).find(|(l, r)| l != r);
-
-        if first_none_equal.is_none() {
-            return Ordering::Equal;
-        }
-
-        let (left_card, right_card) = first_none_equal.unwrap();
-
-        return left_card.cmp(right_card);
-    }
-
-    fn compare_v2(left: Hand, right: Hand) -> Ordering {
-        let left_type = HandType::from_cards_v2(left);
-        let right_type = HandType::from_cards_v2(right);
-
-        if left_type != right_type {
-            return left_type.cmp(&right_type);
-        };
-
-        let first_none_equal = left.0.iter().zip(right.0.iter()).find(|(l, r)| l != r);
-
-        if first_none_equal.is_none() {
-            return Ordering::Equal;
-        }
-
-        let (mut left_card, mut right_card) = first_none_equal.unwrap();
-
-        if left_card == &Card::Jack {
-            left_card = &Card::Joker;
-        }
-
-        if right_card == &Card::Jack {
-            right_card = &Card::Joker;
-        }
-
-        return left_card.cmp(right_card);
-    }
-}
-
 impl HandType {
     fn from_cards(cards: Hand) -> HandType {
         let mut card_counts: std::collections::HashMap<Card, u8> = std::collections::HashMap::new();
@@ -168,6 +117,57 @@ impl HandType {
             [1, 1, 1, 1, 1] => HandType::HighCard,
             _ => panic!("invalid card counts"),
         }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+struct Hand([Card; 5]);
+
+impl Hand {
+    fn compare(left: Hand, right: Hand) -> Ordering {
+        let left_type = HandType::from_cards(left);
+        let right_type = HandType::from_cards(right);
+
+        if left_type != right_type {
+            return left_type.cmp(&right_type);
+        };
+
+        let first_none_equal = left.0.iter().zip(right.0.iter()).find(|(l, r)| l != r);
+
+        if first_none_equal.is_none() {
+            return Ordering::Equal;
+        }
+
+        let (left_card, right_card) = first_none_equal.unwrap();
+
+        return left_card.cmp(right_card);
+    }
+
+    fn compare_v2(left: Hand, right: Hand) -> Ordering {
+        let left_type = HandType::from_cards_v2(left);
+        let right_type = HandType::from_cards_v2(right);
+
+        if left_type != right_type {
+            return left_type.cmp(&right_type);
+        };
+
+        let first_none_equal = left.0.iter().zip(right.0.iter()).find(|(l, r)| l != r);
+
+        if first_none_equal.is_none() {
+            return Ordering::Equal;
+        }
+
+        let (mut left_card, mut right_card) = first_none_equal.unwrap();
+
+        if left_card == &Card::Jack {
+            left_card = &Card::Joker;
+        }
+
+        if right_card == &Card::Jack {
+            right_card = &Card::Joker;
+        }
+
+        return left_card.cmp(right_card);
     }
 }
 
