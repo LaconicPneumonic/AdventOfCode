@@ -75,9 +75,6 @@ fn tilt_rock_map(map: &RockMap, direction: (isize, isize)) -> RockMap {
         point_order.reverse()
     }
     for (row, col) in point_order {
-        // println!("{} {}", row, col);
-        // println!("{:?}", map.rocks.get(&(row, col)));
-
         let rock_val = map.rocks.get(&(row, col));
 
         if rock_val.is_none() {
@@ -122,14 +119,6 @@ fn tilt_rock_map(map: &RockMap, direction: (isize, isize)) -> RockMap {
             'O',
         );
     }
-
-    // if new_rocks.len() != map.rocks.len() {
-    //     panic!(
-    //         "new rocks len {} != old rocks len {}",
-    //         new_rocks.len(),
-    //         map.rocks.len()
-    //     );
-    // }
 
     return RockMap {
         rows: map.rows,
@@ -180,9 +169,6 @@ fn main() {
     }
 
     let cycle_start = seen.get(&curr_rock_map).unwrap();
-
-    // println!("beginning of cycle {:?}", cycle_start);
-    // println!("weight array {:?}", weight_array);
 
     println!(
         "answer 2: {}",
